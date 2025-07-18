@@ -10,3 +10,17 @@ Boot it up from the terminal using:
 
     docker-compose up --build
 
+
+```mermaid
+flowchart LR
+    User["User HTTP GET /video"]
+    VideoStreaming["video-streaming app"]
+    RabbitMQ["RabbitMQ 'viewed' exchange (fanout)"]
+    HistoryService["history service\n(consumes and stores videoPath)"]
+    RecommendationService["recommendations service\n(consumes and processes)"]
+    
+    User --> VideoStreaming
+    VideoStreaming -->|publish message| RabbitMQ
+    RabbitMQ --> HistoryService
+    RabbitMQ --> RecommendationService
+```
